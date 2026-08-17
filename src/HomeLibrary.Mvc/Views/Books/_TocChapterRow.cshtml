@@ -1,0 +1,52 @@
+﻿@model HomeLibrary.Mvc.Models.TocChapter
+@{
+    // Уникальный ключ строки главы для не-последовательного model binding
+    var key = ViewData["Index"]?.ToString() ?? Guid.NewGuid().ToString("N");
+    var sections = Model?.Sections ?? new List<HomeLibrary.Mvc.Models.TocSection>();
+}
+
+<div class="toc-chapter card mb-2" data-key="@key">
+    <div class="card-body py-2">
+        <input type="hidden" name="chapters.Index" value="@key" />
+        <div class="row g-2 align-items-center">
+            <div class="col-auto"><span class="badge bg-secondary">Глава</span></div>
+            <div class="col">
+                <input name="chapters[@key].Title" value="@(Model?.Title)"
+                       class="form-control form-control-sm" placeholder="Название главы" />
+            </div>
+            <div class="col-3">
+                <input name="chapters[@key].Page" value="@(Model?.Page)"
+                       class="form-control form-control-sm" placeholder="Стр." />
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-danger btn-sm toc-remove-chapter" title="Удалить главу">✕</button>
+            </div>
+        </div>
+
+        <div class="toc-sections mt-2 ms-4">
+            @for (var j = 0; j < sections.Count; j++)
+            {
+                var sKey = j.ToString();
+                <div class="toc-section row g-2 align-items-center mb-1" data-key="@sKey">
+                    <input type="hidden" name="chapters[@key].Sections.Index" value="@sKey" />
+                    <div class="col-auto"><span class="badge bg-light text-dark">Раздел</span></div>
+                    <div class="col">
+                        <input name="chapters[@key].Sections[@sKey].Title" value="@sections[j].Title"
+                               class="form-control form-control-sm" placeholder="Название раздела" />
+                    </div>
+                    <div class="col-3">
+                        <input name="chapters[@key].Sections[@sKey].Page" value="@sections[j].Page"
+                               class="form-control form-control-sm" placeholder="Стр." />
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-danger btn-sm toc-remove-section" title="Удалить раздел">✕</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary btn-sm mt-1 ms-4 toc-add-section">
+            + Добавить раздел
+        </button>
+    </div>
+</div>

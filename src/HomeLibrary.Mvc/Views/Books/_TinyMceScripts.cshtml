@@ -1,0 +1,16 @@
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7.3.0/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#TocBox',
+        height: 400,
+        menubar: false,
+        promotion: false,
+        branding: false,
+        license_key: 'gpl',
+        plugins: 'lists link table code',
+        toolbar: 'undo redo | blocks | bold italic | bullist numlist | table | link | code',
+        setup: function (editor) {
+            editor.on('change keyup', function () { editor.save(); });
+        }
+    });
+</script>

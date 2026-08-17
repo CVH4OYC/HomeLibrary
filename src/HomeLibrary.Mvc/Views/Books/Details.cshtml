@@ -1,0 +1,45 @@
+﻿@model HomeLibrary.Mvc.Models.Book
+@{
+    ViewData["Title"] = Model.Title;
+    var tocHtml = ViewData["TocHtml"] as string;
+}
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+
+<h1>@Model.Title</h1>
+<h5 class="text-muted">@Model.Author</h5>
+
+<dl class="row mt-3">
+    <dt class="col-sm-3">Год издания</dt>
+    <dd class="col-sm-9">@(Model.PublicationYear?.ToString() ?? "—")</dd>
+
+    <dt class="col-sm-3">Издательство</dt>
+    <dd class="col-sm-9">@(Model.Publisher ?? "—")</dd>
+
+    <dt class="col-sm-3">ISBN</dt>
+    <dd class="col-sm-9">@(Model.ISBN ?? "—")</dd>
+
+    <dt class="col-sm-3">Число страниц</dt>
+    <dd class="col-sm-9">@(Model.PageCount?.ToString() ?? "—")</dd>
+
+    <dt class="col-sm-3">Жанр</dt>
+    <dd class="col-sm-9">@(Model.Genre ?? "—")</dd>
+</dl>
+
+<h4>Оглавление</h4>
+<div class="border rounded p-3 mb-3 bg-light">
+    @if (string.IsNullOrWhiteSpace(tocHtml))
+    {
+        <span class="text-muted">Оглавление не задано.</span>
+    }
+    else
+    {
+        @Html.Raw(tocHtml)
+    }
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Изменить</a>
+<a asp-action="Index" class="btn btn-secondary">К списку</a>

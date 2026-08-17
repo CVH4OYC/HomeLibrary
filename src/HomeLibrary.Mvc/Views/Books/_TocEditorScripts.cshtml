@@ -1,0 +1,80 @@
+﻿@* Скрипт структурного редактора оглавления: динамическое добавление/удаление
+   глав и разделов. Использует шаблоны model binding вида
+   chapters.Index / chapters[key].Title / chapters[key].Sections[...] . *@
+<script>
+    (function () {
+        var chaptersContainer = document.getElementById('toc-chapters');
+        var addChapterBtn = document.getElementById('toc-add-chapter');
+        if (!chaptersContainer || !addChapterBtn) {
+            return;
+        }
+
+        // Генерирует уникальный ключ для нового элемента (для non-sequential binding).
+        function newKey() {
+            return 'n' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);
+        }
+
+        function buildChapter(key) {
+            var card = document.createElement('div');
+            card.className = 'toc-chapter card mb-2';
+            card.setAttribute('data-key', key);
+            card.innerHTML =
+                '<div class="card-body py-2">' +
+                '  <input type="hidden" name="chapters.Index" value="' + key + '" />' +
+                '  <div class="row g-2 align-items-center">' +
+                '    <div class="col-auto"><span class="badge bg-secondary">Глава</span></div>' +
+                '    <div class="col"><input name="chapters[' + key + '].Title" class="form-control form-control-sm" placeholder="Название главы" /></div>' +
+                '    <div class="col-3"><input name="chapters[' + key + '].Page" class="form-control form-control-sm" placeholder="Стр." /></div>' +
+                '    <div class="col-auto"><button type="button" class="btn btn-outline-danger btn-sm toc-remove-chapter" title="Удалить главу">✕</button></div>' +
+                '  </div>' +
+                '  <div class="toc-sections mt-2 ms-4"></div>' +
+                '  <button type="button" class="btn btn-outline-secondary btn-sm mt-1 ms-4 toc-add-section">+ Добавить раздел</button>' +
+                '</div>';
+            return card;
+        }
+
+        function buildSection(chapterKey, sectionKey) {
+            var row = document.createElement('div');
+            row.className = 'toc-section row g-2 align-items-center mb-1';
+            row.setAttribute('data-key', sectionKey);
+            var prefix = 'chapters[' + chapterKey + '].Sections';
+            row.innerHTML =
+                '<input type="hidden" name="' + prefix + '.Index" value="' + sectionKey + '" />' +
+                '<div class="col-auto"><span class="badge bg-light text-dark">Раздел</span></div>' +
+                '<div class="col"><input name="' + prefix + '[' + sectionKey + '].Title" class="form-control form-control-sm" placeholder="Название раздела" /></div>' +
+                '<div class="col-3"><input name="' + prefix + '[' + sectionKey + '].Page" class="form-control form-control-sm" placeholder="Стр." /></div>' +
+                '<div class="col-auto"><button type="button" class="btn btn-outline-danger btn-sm toc-remove-section" title="Удалить раздел">✕</button></div>';
+            return row;
+        }
+
+        addChapterBtn.addEventListener('click', function () {
+            chaptersContainer.appendChild(buildChapter(newKey()));
+        });
+
+        // Делегирование кликов по кнопкам внутри контейнера.
+        chaptersContainer.addEventListener('click', function (e) {
+            var target = e.target;
+
+            if (target.classList.contains('toc-remove-chapter')) {
+                var chapter = target.closest('.toc-chapter');
+                if (chapter) { chapter.remove(); }
+                return;
+            }
+
+            if (target.classList.contains('toc-add-section')) {
+                var card = target.closest('.toc-chapter');
+                if (!card) { return; }
+                var chapterKey = card.getAttribute('data-key');
+                var sectionsBox = card.querySelector('.toc-sections');
+                sectionsBox.appendChild(buildSection(chapterKey, newKey()));
+                return;
+            }
+
+            if (target.classList.contains('toc-remove-section')) {
+                var section = target.closest('.toc-section');
+                if (section) { section.remove(); }
+                return;
+            }
+        });
+    })();
+</script>

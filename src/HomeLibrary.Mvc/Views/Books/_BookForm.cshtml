@@ -1,0 +1,71 @@
+﻿@model HomeLibrary.Mvc.Models.Book
+@{
+    var chapters = ViewData["Chapters"] as List<HomeLibrary.Mvc.Models.TocChapter>
+        ?? new List<HomeLibrary.Mvc.Models.TocChapter>();
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Author" class="form-label"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label asp-for="PublicationYear" class="form-label"></label>
+        <input asp-for="PublicationYear" class="form-control" />
+        <span asp-validation-for="PublicationYear" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 mb-3">
+        <label asp-for="PageCount" class="form-label"></label>
+        <input asp-for="PageCount" class="form-control" />
+        <span asp-validation-for="PageCount" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Publisher" class="form-label"></label>
+        <input asp-for="Publisher" class="form-control" />
+        <span asp-validation-for="Publisher" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="ISBN" class="form-label"></label>
+        <input asp-for="ISBN" class="form-control" />
+        <span asp-validation-for="ISBN" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Genre" class="form-label"></label>
+        <input asp-for="Genre" class="form-control" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold">Оглавление</label>
+    <p class="text-muted small mb-2">
+        Заполните главы книги. У каждой главы можно добавить разделы (подпункты).
+        Номер страницы указывать необязательно. Оглавление сохраняется в XML-поле базы данных.
+    </p>
+
+    <div id="toc-editor" class="border rounded p-3 bg-light">
+        <div id="toc-chapters">
+            @for (var i = 0; i < chapters.Count; i++)
+            {
+                <partial name="_TocChapterRow" model="chapters[i]" view-data="@(new ViewDataDictionary(ViewData) { { "Index", i } })" />
+            }
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="toc-add-chapter">
+            + Добавить главу
+        </button>
+    </div>
+</div>

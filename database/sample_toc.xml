@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Пример файла оглавления книги (п.2 задания: "оглавление в виде xml файла").
+     Такой же по структуре XML хранится в поле dbo.Books.TableOfContents. -->
+<toc>
+  <chapter number="1" title="Введение в предметную область" page="7">
+    <section title="История вопроса" page="9" />
+    <section title="Основные термины" page="14" />
+  </chapter>
+  <chapter number="2" title="Базовые концепции" page="21">
+    <section title="Модель данных" page="23" />
+    <section title="Связи и ограничения" page="35" />
+  </chapter>
+  <chapter number="3" title="Практические примеры" page="52">
+    <section title="Разбор кейсов" page="54" />
+    <section title="Типичные ошибки" page="70" />
+  </chapter>
+  <chapter number="4" title="Заключение" page="88" />
+</toc>

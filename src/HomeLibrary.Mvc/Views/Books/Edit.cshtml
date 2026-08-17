@@ -1,0 +1,20 @@
+﻿@model HomeLibrary.Mvc.Models.Book
+@{
+    ViewData["Title"] = "Редактирование: " + Model.Title;
+}
+
+<h1>Редактирование книги</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_BookForm" model="Model" />
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_TocEditorScripts" />
+}

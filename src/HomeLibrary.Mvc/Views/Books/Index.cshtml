@@ -1,0 +1,62 @@
+﻿@model IEnumerable<HomeLibrary.Mvc.Models.Book>
+@{
+    ViewData["Title"] = "Книги";
+    var search = ViewData["Search"] as string;
+}
+
+<h1>Домашняя библиотека</h1>
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @msg
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="search" value="@search" class="form-control" placeholder="Поиск по названию или автору" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">Найти</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+    </div>
+    <div class="col-auto ms-auto">
+        <a asp-action="Create" class="btn btn-success">Добавить книгу</a>
+    </div>
+</form>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Год</th>
+            <th>Жанр</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">Книги не найдены.</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author</td>
+                <td>@(item.PublicationYear?.ToString() ?? "—")</td>
+                <td>@(item.Genre ?? "—")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Просмотр</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
